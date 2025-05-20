@@ -1,4 +1,3 @@
-// src/middleware/auth.ts
 import { RequestHandler } from 'express';
 import jwt from 'jsonwebtoken';
 
@@ -11,17 +10,20 @@ export const checkToken: RequestHandler = (req, res, next): void => {
     res.status(401).json({ message: 'No token provided' });
     return;
   }
-  const parts = authHeader.split(' ');
-  if (parts.length !== 2 || parts[0] !== 'Bearer') {
+
+  const [scheme, token] = authHeader.split(' ');
+
+  if (scheme !== 'Bearer' || !token) {
     res.status(401).json({ message: 'Malformed token' });
     return;
   }
-  const token = parts[1];
+
   try {
-    jwt.verify(token, process.env.SECRET_KEY as string);
+    const decoded = jwt.verify(token, process.env.SECRET_KEY as string);
+    // Puedes guardar el usuario decodificado en req.user si te interesa usarlo luego
+    (req as any).user = decoded;
     next();
-  } catch {
+  } catch (err) {
     res.status(403).json({ message: 'Invalid or expired token' });
-    return;
   }
 };
