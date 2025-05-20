@@ -1,31 +1,49 @@
 import { Router } from 'express';
-// import * as authCtrl from './controllers/auth';
-// import * as roomCtrl from './controllers/room';
-// …otros controladores
+import * as employeeCtrl from './controllers/employeeController';
+import * as guestCtrl from './controllers/guestController';
+import * as roomCtrl from './controllers/roomController';
+import { checkToken } from './middleware/auth';
 
 const router = Router();
 
-// Ruta pública
+// Public info
 router.get('/', (req, res) => {
   res.json({
-    name: process.env.HOTEL_NAME,
-    version: '1.0.0',
+    hotel: process.env.HOTEL_NAME,
     endpoints: [
-      { path: '/rooms', method: 'GET', private: true },
-      // …
-    ],
+      { method: 'GET', path: '/employees' },
+      { method: 'GET', path: '/guests' },
+      { method: 'GET', path: '/rooms' }
+    ]
   });
 });
 
-// Rutas de autenticación (login)
-// router.post('/login', authCtrl.login);
+// Authentication routes (implement login separately)
+import * as authCtrl from './controllers/authController';
+router.post('/login', authCtrl.login);
 
-// Middleware de JWT para proteger lo que viene después
-// import { checkToken } from './middleware/auth';
-// router.use(checkToken);
+// Protected routes
+router.use(checkToken);
 
-// Rutas privadas
-// router.get('/rooms', roomCtrl.getRooms);
-// …
+// Employees
+router.get('/employees', employeeCtrl.getEmployees);
+router.get('/employees/:id', employeeCtrl.getEmployee);
+router.post('/employees', employeeCtrl.createEmployee);
+router.put('/employees/:id', employeeCtrl.updateEmployeeCtrl);
+router.delete('/employees/:id', employeeCtrl.deleteEmployeeCtrl);
+
+// Guests
+router.get('/guests', guestCtrl.getGuests);
+router.get('/guests/:id', guestCtrl.getGuest);
+router.post('/guests', guestCtrl.createGuest);
+router.put('/guests/:id', guestCtrl.updateGuestCtrl);
+router.delete('/guests/:id', guestCtrl.deleteGuestCtrl);
+
+// Rooms
+router.get('/rooms', roomCtrl.getRooms);
+router.get('/rooms/:id', roomCtrl.getRoom);
+router.post('/rooms', roomCtrl.createRoom);
+router.put('/rooms/:id', roomCtrl.updateRoomCtrl);
+router.delete('/rooms/:id', roomCtrl.deleteRoomCtrl);
 
 export default router;
