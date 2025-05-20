@@ -1,31 +1,34 @@
-import { Request, Response } from 'express';
+import { RequestHandler } from 'express';
 import { employeeService } from '../services/services';
 import { Employee } from '../interfaces/models';
 
-export async function getEmployees(req: Request, res: Response) {
+export const getEmployees: RequestHandler = async (req, res) => {
   const list = await employeeService.fetchAll();
   res.json(list);
-}
+};
 
-export async function getEmployee(req: Request, res: Response) {
+export const getEmployee: RequestHandler = async (req, res): Promise<void> => {
   const emp = await employeeService.fetchOne(req.params.id);
-  if (!emp) return res.sendStatus(404);
+  if (!emp) {
+    res.sendStatus(404);
+    return;
+  }
   res.json(emp);
-}
+};
 
-export async function createEmployee(req: Request, res: Response) {
-  const data: Employee = req.body;
+export const createEmployee: RequestHandler = async (req, res) => {
+  const data = req.body as Employee;
   const created = await employeeService.create(data);
   res.status(201).json(created);
-}
+};
 
-export async function updateEmployeeCtrl(req: Request, res: Response) {
-  const data: Employee = req.body;
+export const updateEmployeeCtrl: RequestHandler = async (req, res) => {
+  const data = req.body as Employee;
   const updated = await employeeService.update(data);
   res.json(updated);
-}
+};
 
-export async function deleteEmployeeCtrl(req: Request, res: Response) {
+export const deleteEmployeeCtrl: RequestHandler = async (req, res) => {
   const id = await employeeService.remove(req.params.id);
   res.json({ id });
-}
+};
