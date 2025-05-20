@@ -1,12 +1,12 @@
 // src/routes.ts
-import { Router } from 'express';
+import express from 'express';
 import { login } from './controllers/authController';
 import { checkToken } from './middleware/auth';
 import * as employeeCtrl from './controllers/employeeController';
 import * as guestCtrl from './controllers/guestController';
 import * as roomCtrl from './controllers/roomController';
 
-const router = Router();
+const router = express.Router();
 
 // Public endpoint: API info
 router.get('/', (req, res) => {
