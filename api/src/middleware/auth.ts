@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import jwt from 'jsonwebtoken';
 
 /**
- * Middleware to verify JWT token in Authorization header (Bearer <token>)
+ * Middleware para verificar JWT token  (Bearer <token>)
  */
 export const checkToken: RequestHandler = (req, res, next): void => {
   const authHeader = req.headers.authorization;
@@ -20,7 +20,7 @@ export const checkToken: RequestHandler = (req, res, next): void => {
 
   try {
     const decoded = jwt.verify(token, process.env.SECRET_KEY as string);
-    // Puedes guardar el usuario decodificado en req.user si te interesa usarlo luego
+
     (req as any).user = decoded;
     next();
   } catch (err) {
