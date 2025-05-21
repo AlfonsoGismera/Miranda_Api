@@ -1,6 +1,5 @@
 import { RequestHandler } from 'express';
 import jwt from 'jsonwebtoken';
-
 /**
  * Middleware para verificar JWT token  (Bearer <token>)
  */
