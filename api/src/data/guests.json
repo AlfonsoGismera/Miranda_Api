@@ -141,5 +141,31 @@
     "email": "david.nguyen@example.com",
     "phone": "+1-202-555-0177",
     "image": "https://randomuser.me/api/portraits/men/11.jpg"
+  },
+  {
+    "guest": "Test Guest",
+    "reservationId": "U999",
+    "orderDate": "2025-05-22T11:16:00.610Z",
+    "checkIn": "2025-05-22T11:16:00.610Z",
+    "checkOut": "2025-05-22T11:16:00.610Z",
+    "specialRequest": "None",
+    "roomType": "Test Room",
+    "status": "Pending",
+    "email": "test.guest@example.com",
+    "phone": "+123456789",
+    "image": "https://example.com/image.jpg"
+  },
+  {
+    "guest": "Lookup Guest",
+    "reservationId": "U998",
+    "orderDate": "2025-05-22T11:16:00.615Z",
+    "checkIn": "2025-05-22T11:16:00.615Z",
+    "checkOut": "2025-05-22T11:16:00.615Z",
+    "specialRequest": "",
+    "roomType": "Test Room",
+    "status": "Booked",
+    "email": "lookup.guest@example.com",
+    "phone": "+987654321",
+    "image": "https://example.com/lookup.jpg"
   }
 ]
