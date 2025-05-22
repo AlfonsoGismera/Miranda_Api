@@ -16,6 +16,7 @@ interface Guest {
 }
 
 let token: string;
+let createdId: string;
 
 beforeAll(async () => {
   const res = await request(app)
@@ -38,10 +39,11 @@ describe('Guests API', () => {
     expect(Array.isArray(res.body)).toBe(true);
   });
 
-  it('should create a new guest', async () => {
+  it('should create, retrieve, delete and confirm deletion of a guest', async () => {
+    createdId = 'U' + Date.now();
     const newGuest: Guest = {
       guest: 'Test Guest',
-      reservationId: 'U999',
+      reservationId: createdId,
       orderDate: new Date().toISOString(),
       checkIn: new Date().toISOString(),
       checkOut: new Date().toISOString(),
@@ -50,40 +52,39 @@ describe('Guests API', () => {
       status: 'Pending',
       email: 'test.guest@example.com',
       phone: '+123456789',
-      image: 'https://example.com/image.jpg'
+      image: 'https://example.com/image.jpg',
     };
-    const res = await request(app)
+    const createRes = await request(app)
       .post('/api/guests')
       .set('Authorization', `Bearer ${token}`)
       .send(newGuest);
-    expect(res.status).toBe(201);
-    expect(res.body).toMatchObject(newGuest);
-  });
+    expect(createRes.status).toBe(201);
+    expect(createRes.body).toMatchObject(newGuest);
 
-  it('should get a guest by ID', async () => {
-    // First create
-    const guestData = {
-      guest: 'Lookup Guest',
-      reservationId: 'U998',
-      orderDate: new Date().toISOString(),
-      checkIn: new Date().toISOString(),
-      checkOut: new Date().toISOString(),
-      specialRequest: '',
-      roomType: 'Test Room',
-      status: 'Booked',
-      email: 'lookup.guest@example.com',
-      phone: '+987654321',
-      image: 'https://example.com/lookup.jpg'
-    };
-    await request(app)
-      .post('/api/guests')
-      .set('Authorization', `Bearer ${token}`)
-      .send(guestData);
-
-    const res = await request(app)
-      .get(`/api/guests/${guestData.reservationId}`)
+  
+    const listRes = await request(app)
+      .get('/api/guests')
       .set('Authorization', `Bearer ${token}`);
-    expect(res.status).toBe(200);
-    expect(res.body).toMatchObject(guestData);
+    expect(listRes.body.some((g: any) => g.reservationId === createdId)).toBe(true);
+
+
+    const getRes = await request(app)
+      .get(`/api/guests/${createdId}`)
+      .set('Authorization', `Bearer ${token}`);
+    expect(getRes.status).toBe(200);
+    expect(getRes.body).toMatchObject(newGuest);
+
+
+    const delRes = await request(app)
+      .delete(`/api/guests/${createdId}`)
+      .set('Authorization', `Bearer ${token}`);
+    expect(delRes.status).toBe(200);
+    expect(delRes.body).toEqual({ id: createdId });
+
+
+    const afterDelRes = await request(app)
+      .get('/api/guests')
+      .set('Authorization', `Bearer ${token}`);
+    expect(afterDelRes.body.some((g: any) => g.reservationId === createdId)).toBe(false);
   });
 });

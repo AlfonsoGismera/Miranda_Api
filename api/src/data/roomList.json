@@ -224,30 +224,5 @@
     "rate": "$230/Night",
     "status": "Available",
     "image": "https://images.pexels.com/photos/8092391/pexels-photo-8092391.jpeg?auto=compress&cs=tinysrgb&w=800"
-  },
-  {
-    "roomId": "R999",
-    "roomName": "Test Room",
-    "bedType": "Queen",
-    "roomFloor": "1",
-    "facilities": [
-      "Wi-Fi",
-      "TV"
-    ],
-    "rate": "$99/Night",
-    "status": "Available",
-    "image": "https://example.com/room.jpg"
-  },
-  {
-    "roomId": "R998",
-    "roomName": "Lookup Room",
-    "bedType": "King",
-    "roomFloor": "2",
-    "facilities": [
-      "AC"
-    ],
-    "rate": "$150/Night",
-    "status": "Booked",
-    "image": "https://example.com/lookup-room.jpg"
   }
 ]

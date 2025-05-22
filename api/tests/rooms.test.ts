@@ -1,3 +1,4 @@
+
 import request from 'supertest';
 import app from '../src/app';
 
@@ -13,6 +14,7 @@ interface Room {
 }
 
 let token: string;
+let createdId: string;
 
 beforeAll(async () => {
   const res = await request(app)
@@ -35,9 +37,10 @@ describe('Rooms API', () => {
     expect(Array.isArray(res.body)).toBe(true);
   });
 
-  it('should create a new room', async () => {
+  it('should create, retrieve, delete and confirm deletion of a room', async () => {
+    createdId = 'R' + Date.now();
     const newRoom: Room = {
-      roomId: 'R999',
+      roomId: createdId,
       roomName: 'Test Room',
       bedType: 'Queen',
       roomFloor: '1',
@@ -46,35 +49,38 @@ describe('Rooms API', () => {
       status: 'Available',
       image: 'https://example.com/room.jpg'
     };
-    const res = await request(app)
+
+
+    const createRes = await request(app)
       .post('/api/rooms')
       .set('Authorization', `Bearer ${token}`)
       .send(newRoom);
-    expect(res.status).toBe(201);
-    expect(res.body).toMatchObject(newRoom);
-  });
+    expect(createRes.status).toBe(201);
+    expect(createRes.body).toMatchObject(newRoom);
 
-  it('should get a room by ID', async () => {
-    // First create
-    const roomData = {
-      roomId: 'R998',
-      roomName: 'Lookup Room',
-      bedType: 'King',
-      roomFloor: '2',
-      facilities: ['AC'],
-      rate: '$150/Night',
-      status: 'Booked',
-      image: 'https://example.com/lookup-room.jpg'
-    };
-    await request(app)
-      .post('/api/rooms')
-      .set('Authorization', `Bearer ${token}`)
-      .send(roomData);
 
-    const res = await request(app)
-      .get(`/api/rooms/${roomData.roomId}`)
+    const listRes = await request(app)
+      .get('/api/rooms')
       .set('Authorization', `Bearer ${token}`);
-    expect(res.status).toBe(200);
-    expect(res.body).toMatchObject(roomData);
+    expect(listRes.body.some((r: any) => r.roomId === createdId)).toBe(true);
+
+
+    const getRes = await request(app)
+      .get(`/api/rooms/${createdId}`)
+      .set('Authorization', `Bearer ${token}`);
+    expect(getRes.status).toBe(200);
+    expect(getRes.body).toMatchObject(newRoom);
+
+    // Borrar
+    const delRes = await request(app)
+      .delete(`/api/rooms/${createdId}`)
+      .set('Authorization', `Bearer ${token}`);
+    expect(delRes.status).toBe(200);
+    expect(delRes.body).toEqual({ id: createdId });
+
+    const afterDelRes = await request(app)
+      .get('/api/rooms')
+      .set('Authorization', `Bearer ${token}`);
+    expect(afterDelRes.body.some((r: any) => r.roomId === createdId)).toBe(false);
   });
 });
