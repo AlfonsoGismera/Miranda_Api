@@ -1,0 +1,27 @@
+# service: trav-hotel-api
+# frameworkVersion: '3'
+
+# provider:
+#   name: aws
+#   runtime: nodejs18.x
+#   region: eu-west-3      
+#   stage: dev
+#   environment:
+#     SECRET_KEY: ${env:SECRET_KEY}
+#     HOTEL_NAME:  ${env:HOTEL_NAME}
+
+# functions:
+#   api:
+#     handler: src/lambda.handler
+#     events:
+#       - httpApi:   
+#           path: /{proxy+}
+#           method: ANY
+
+# package:
+#   exclude:
+#     - node_modules/**
+#     - test/**
+#     - src/**
+#   include:
+#     - dist/**
