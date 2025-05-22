@@ -289,5 +289,17 @@
     "hireDate": "2025-05-20",
     "contact": "000",
     "status": "Active"
+  },
+  {
+    "employeeId": "EMP999",
+    "name": "Test User",
+    "image": "",
+    "jobDesk": "Tester",
+    "schedule": [
+      "Mon"
+    ],
+    "hireDate": "2025-05-20",
+    "contact": "000",
+    "status": "Active"
   }
 ]
