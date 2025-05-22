@@ -28,9 +28,11 @@ api/
 │       ├── employees.json
 │       ├── guests.json
 │       └── roomList.json
-├── test/                    # Pruebas Jest + Supertest
+├── tests/                    # Pruebas Jest + Supertest
 │   ├── auth.test.ts
-│   └── employees.test.ts
+│   ├── employees.test.ts
+│   ├── guests.test.ts
+│   └── rooms.test.ts
 ├── .env                     # Variables de entorno
 ├── jest.config.js
 ├── tsconfig.json
@@ -63,10 +65,10 @@ api/
 
 **`tsconfig.json`**:
 
-- `rootDir": "."` para incluir `src/` y `test/`
-- `outDir": "./dist"`
+- `rootDir: "."` para incluir `src/` y `tests/`
+- `outDir: "./dist"`
 - `strict`, `esModuleInterop` y `skipLibCheck` activados
-- `include: ["src", "test"]`
+- `include: ["src", "tests"]`
 
 ---
 
@@ -79,8 +81,8 @@ api/
 }
 ```
 
-- **`npm run dev`**: arranca el servidor en modo desarrollo (watch + ts-node).
-- **`npm test`**: ejecuta las pruebas con Jest.
+- **`npm run dev`**: arranca el servidor en modo desarrollo (watch + ts-node).  
+- **`npm test`**: ejecuta las pruebas con Jest.  
 
 ---
 
@@ -132,22 +134,37 @@ Bajo `/api`, protegidas por JWT (tras `/login`):
   - `PUT    /api/rooms/:id`
   - `DELETE /api/rooms/:id`
 
+Los servicios (en `src/services/services.ts`) realizan CRUD sobre los JSON de ejemplo en `src/data/`.
+
 ---
 
 ### 🧪 Pruebas Automáticas
 
-- **`test/auth.test.ts`**:
+- **`tests/auth.test.ts`**:
   - Login correcto → HTTP 200 + token válido
   - Login incorrecto → HTTP 401
   - Acceso a ruta protegida sin token → HTTP 401
   - Acceso con token inválido → HTTP 403
 
-- **`test/employees.test.ts`**:
-  - GET `/api/employees` sin token → 401
-  - GET `/api/employees` con token → 200 + array
-  - POST `/api/employees` crea un nuevo empleado → 201 + objeto creado
+- **`tests/employees.test.ts`**:
+  - GET `/api/employees` sin token → HTTP 401
+  - GET `/api/employees` con token → HTTP 200 + array
+  - POST `/api/employees` crea un nuevo empleado → HTTP 201 + objeto creado
+  - GET `/api/employees/:id` devuelve un empleado existente → HTTP 200
 
-Ejecutar con:
+- **`tests/guests.test.ts`**:
+  - GET `/api/guests` sin token → HTTP 401
+  - GET `/api/guests` con token → HTTP 200 + array
+  - POST `/api/guests` crea un nuevo huésped → HTTP 201 + objeto creado
+  - GET `/api/guests/:id` devuelve un huésped existente → HTTP 200
+
+- **`tests/rooms.test.ts`**:
+  - GET `/api/rooms` sin token → HTTP 401
+  - GET `/api/rooms` con token → HTTP 200 + array
+  - POST `/api/rooms` crea una nueva habitación → HTTP 201 + objeto creado
+  - GET `/api/rooms/:id` devuelve una habitación existente → HTTP 200
+
+Ejecuta las pruebas con:  
 ```bash
 npm test
 ```
@@ -173,4 +190,5 @@ Abre [http://localhost:3000/docs](http://localhost:3000/docs) para explorar la A
 - Pruebas automatizadas
 - Documentación interactiva Swagger
 - Mini-UI HTML para login y exploración rápida
+
 
