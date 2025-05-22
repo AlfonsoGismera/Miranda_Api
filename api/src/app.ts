@@ -79,7 +79,7 @@ app.get('/', (_req, res) => {
   <button class="endpoint" data-path="/rooms">Habitaciones</button>
 
   <h2>3. Resultado</h2>
-  <pre id="output">–</pre>
+  <pre id="output"></pre>
 
 
 

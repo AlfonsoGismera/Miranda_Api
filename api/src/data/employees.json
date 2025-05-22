@@ -193,5 +193,17 @@
     "hireDate": "2024-03-10",
     "contact": "+34-600-567-901",
     "status": "Active"
+  },
+  {
+    "employeeId": "EMP0017",
+    "name": "María García",
+    "image": "https://randomuser.me/api/portraits/women/21.jpg",
+    "jobDesk": "Front Desk Manager",
+    "schedule": [
+      "Mon"
+    ],
+    "hireDate": "2021-06-15",
+    "contact": "+34-600-123-456",
+    "status": "Active"
   }
 ]
