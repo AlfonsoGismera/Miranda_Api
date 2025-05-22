@@ -174,4 +174,3 @@ Abre [http://localhost:3000/docs](http://localhost:3000/docs) para explorar la A
 - Documentación interactiva Swagger
 - Mini-UI HTML para login y exploración rápida
 
-Puedes seguir extendiéndola añadiendo validadores, más endpoints o conectando a una base de datos real. ¡Éxitos con tu integración!
