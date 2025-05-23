@@ -71,7 +71,6 @@ describe('Rooms API', () => {
     expect(getRes.status).toBe(200);
     expect(getRes.body).toMatchObject(newRoom);
 
-    // Borrar
     const delRes = await request(app)
       .delete(`/api/rooms/${createdId}`)
       .set('Authorization', `Bearer ${token}`);
