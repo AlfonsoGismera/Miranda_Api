@@ -76,6 +76,7 @@ describe('Rooms API', () => {
       .set('Authorization', `Bearer ${token}`);
     expect(delRes.status).toBe(200);
     expect(delRes.body).toEqual({ id: createdId });
+    
 
     const afterDelRes = await request(app)
       .get('/api/rooms')
