@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import routes from './routes';
 import { setupSwagger } from './swagger';
+import { connectDb } from './db';
 
 dotenv.config();
 
@@ -12,6 +13,11 @@ app.use(express.json());
 
 // Documentación Swagger UI en /docs
 setupSwagger(app);
+// Conexión a la base de datos
+connectDb().catch(err => {
+  console.error('Mongo connection error', err);
+  process.exit(1);
+});
 
 // Html UI para la API
 app.get('/', (_req, res) => {
