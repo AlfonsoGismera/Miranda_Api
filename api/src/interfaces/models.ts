@@ -31,3 +31,8 @@ export interface Guest {
   phone: string;
   image: string;
 }
+export interface User {
+  username: string;
+  password: string; 
+  role: 'admin' | 'user';
+}
