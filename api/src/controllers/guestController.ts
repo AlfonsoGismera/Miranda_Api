@@ -1,6 +1,7 @@
+// src/controllers/guestController.ts
 import { RequestHandler } from 'express';
-import { guestService } from '../services/services';
-import { Guest } from '../interfaces/models';
+import { guestService } from '../services/guestService';
+import { IGuest } from '../models/Guest';
 
 /**
  * @openapi
@@ -21,7 +22,7 @@ import { Guest } from '../interfaces/models';
  *               items:
  *                 $ref: '#/components/schemas/Guest'
  */
-export const getGuests: RequestHandler = async (req, res) => {
+export const getGuests: RequestHandler = async (_req, res) => {
   const list = await guestService.fetchAll();
   res.json(list);
 };
@@ -52,7 +53,7 @@ export const getGuests: RequestHandler = async (req, res) => {
  *       '404':
  *         description: Huésped no encontrado
  */
-export const getGuest: RequestHandler = async (req, res) => {
+export const getGuest: RequestHandler<{ id: string }> = async (req, res) => {
   const g = await guestService.fetchOne(req.params.id);
   if (!g) {
     res.sendStatus(404);
@@ -84,8 +85,8 @@ export const getGuest: RequestHandler = async (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Guest'
  */
-export const createGuest: RequestHandler = async (req, res) => {
-  const data = req.body as Guest;
+export const createGuest: RequestHandler<{}, IGuest> = async (req, res) => {
+  const data = req.body as Partial<IGuest>;
   const created = await guestService.create(data);
   res.status(201).json(created);
 };
@@ -119,10 +120,17 @@ export const createGuest: RequestHandler = async (req, res) => {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Guest'
+ *       '404':
+ *         description: Huésped no encontrado
  */
-export const updateGuestCtrl: RequestHandler = async (req, res) => {
-  const data = req.body as Guest;
+export const updateGuestCtrl: RequestHandler<{ id: string }, IGuest> = async (req, res) => {
+  const data = req.body as IGuest;
+  data.reservationId = req.params.id;
   const updated = await guestService.update(data);
+  if (!updated) {
+    res.sendStatus(404);
+    return;
+  }
   res.json(updated);
 };
 
@@ -154,7 +162,7 @@ export const updateGuestCtrl: RequestHandler = async (req, res) => {
  *                   type: string
  *                   description: Identificador eliminado
  */
-export const deleteGuestCtrl: RequestHandler = async (req, res) => {
+export const deleteGuestCtrl: RequestHandler<{ id: string }> = async (req, res) => {
   const id = await guestService.remove(req.params.id);
   res.json({ id });
 };
