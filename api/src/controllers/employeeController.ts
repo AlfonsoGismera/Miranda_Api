@@ -1,6 +1,7 @@
+// src/controllers/employeeController.ts
 import { RequestHandler } from 'express';
-import { employeeService } from '../services/services';
-import { Employee } from '../interfaces/models';
+import { employeeService } from '../services/employeeService';
+import { IEmployee } from '../models/Employee';
 
 /**
  * @openapi
@@ -21,7 +22,7 @@ import { Employee } from '../interfaces/models';
  *               items:
  *                 $ref: '#/components/schemas/Employee'
  */
-export const getEmployees: RequestHandler = async (req, res) => {
+export const getEmployees: RequestHandler = async (_req, res) => {
   const list = await employeeService.fetchAll();
   res.json(list);
 };
@@ -52,7 +53,7 @@ export const getEmployees: RequestHandler = async (req, res) => {
  *       '404':
  *         description: Empleado no encontrado
  */
-export const getEmployee: RequestHandler = async (req, res): Promise<void> => {
+export const getEmployee: RequestHandler<{ id: string }> = async (req, res) => {
   const emp = await employeeService.fetchOne(req.params.id);
   if (!emp) {
     res.sendStatus(404);
@@ -84,8 +85,8 @@ export const getEmployee: RequestHandler = async (req, res): Promise<void> => {
  *             schema:
  *               $ref: '#/components/schemas/Employee'
  */
-export const createEmployee: RequestHandler = async (req, res) => {
-  const data = req.body as Employee;
+export const createEmployee: RequestHandler<{}, IEmployee> = async (req, res) => {
+  const data = req.body as Partial<IEmployee>;
   const created = await employeeService.create(data);
   res.status(201).json(created);
 };
@@ -120,9 +121,15 @@ export const createEmployee: RequestHandler = async (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Employee'
  */
-export const updateEmployeeCtrl: RequestHandler = async (req, res) => {
-  const data = req.body as Employee;
+export const updateEmployeeCtrl: RequestHandler<{ id: string }, IEmployee> = async (req, res) => {
+  const data = req.body as IEmployee;
+  // opcional: asegurarse de que data.employeeId coincida con req.params.id
+  data.employeeId = req.params.id;
   const updated = await employeeService.update(data);
+  if (!updated) {
+    res.sendStatus(404);
+    return;
+  }
   res.json(updated);
 };
 
@@ -154,7 +161,7 @@ export const updateEmployeeCtrl: RequestHandler = async (req, res) => {
  *                   type: string
  *                   description: ID eliminado
  */
-export const deleteEmployeeCtrl: RequestHandler = async (req, res) => {
+export const deleteEmployeeCtrl: RequestHandler<{ id: string }> = async (req, res) => {
   const id = await employeeService.remove(req.params.id);
   res.json({ id });
 };

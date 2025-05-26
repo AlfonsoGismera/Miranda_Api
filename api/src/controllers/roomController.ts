@@ -1,6 +1,7 @@
+// src/controllers/roomController.ts
 import { RequestHandler } from 'express';
-import { roomService } from '../services/services';
-import { Room } from '../interfaces/models';
+import { roomService } from '../services/roomService';
+import { IRoom } from '../models/Room';
 
 /**
  * @openapi
@@ -21,7 +22,7 @@ import { Room } from '../interfaces/models';
  *               items:
  *                 $ref: '#/components/schemas/Room'
  */
-export const getRooms: RequestHandler = async (req, res) => {
+export const getRooms: RequestHandler = async (_req, res) => {
   const list = await roomService.fetchAll();
   res.json(list);
 };
@@ -52,7 +53,7 @@ export const getRooms: RequestHandler = async (req, res) => {
  *       '404':
  *         description: Habitación no encontrada
  */
-export const getRoom: RequestHandler = async (req, res) => {
+export const getRoom: RequestHandler<{ id: string }> = async (req, res) => {
   const r = await roomService.fetchOne(req.params.id);
   if (!r) {
     res.sendStatus(404);
@@ -84,8 +85,8 @@ export const getRoom: RequestHandler = async (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Room'
  */
-export const createRoom: RequestHandler = async (req, res) => {
-  const data = req.body as Room;
+export const createRoom: RequestHandler<{}, IRoom> = async (req, res) => {
+  const data = req.body as Partial<IRoom>;
   const created = await roomService.create(data);
   res.status(201).json(created);
 };
@@ -119,10 +120,17 @@ export const createRoom: RequestHandler = async (req, res) => {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Room'
+ *       '404':
+ *         description: Habitación no encontrada
  */
-export const updateRoomCtrl: RequestHandler = async (req, res) => {
-  const data = req.body as Room;
+export const updateRoomCtrl: RequestHandler<{ id: string }, IRoom> = async (req, res) => {
+  const data = req.body as IRoom;
+  data.roomId = req.params.id;
   const updated = await roomService.update(data);
+  if (!updated) {
+    res.sendStatus(404);
+    return;
+  }
   res.json(updated);
 };
 
@@ -154,7 +162,7 @@ export const updateRoomCtrl: RequestHandler = async (req, res) => {
  *                   type: string
  *                   description: Identificador eliminado
  */
-export const deleteRoomCtrl: RequestHandler = async (req, res) => {
+export const deleteRoomCtrl: RequestHandler<{ id: string }> = async (req, res) => {
   const id = await roomService.remove(req.params.id);
   res.json({ id });
 };

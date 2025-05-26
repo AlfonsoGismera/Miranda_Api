@@ -9,7 +9,5 @@
     "skipLibCheck": true
   },
   "include": [
-    "src",
-    "tests"
-  ]
+    "src", "tests", "scripts" , "global.d.ts" ]
 }
