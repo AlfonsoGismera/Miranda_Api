@@ -9,6 +9,7 @@ async function readJson<T>(fileName: string): Promise<T[]> {
   return JSON.parse(data) as T[];
 }
 
+
 // Helper to write JSON file
 async function writeJson<T>(fileName: string, data: T[]): Promise<void> {
   const filePath = path.join(__dirname, '../data', fileName);
