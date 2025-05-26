@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import routes from './routes';
 import { setupSwagger } from './swagger';
 import { connectDb } from './db';
+import mongoose from 'mongoose';
 
 dotenv.config();
 
@@ -18,6 +19,13 @@ connectDb().catch(err => {
   console.error('Mongo connection error', err);
   process.exit(1);
 });
+
+// Middleware para manejar errores de autenticación
+app.get('/health', async (_req, res) => {
+  const state = mongoose.connection.readyState;
+  res.json({ mongo: state === 1 ? 'up' : 'down' });
+});
+
 
 // Html UI para la API
 app.get('/', (_req, res) => {
