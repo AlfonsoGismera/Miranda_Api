@@ -20,6 +20,7 @@ connectDb().catch(err => {
   process.exit(1);
 });
 
+
 // Middleware para manejar errores de autenticación
 app.get('/health', async (_req, res) => {
   const state = mongoose.connection.readyState;
