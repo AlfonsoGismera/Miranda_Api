@@ -21,11 +21,11 @@ connectDb().catch(err => {
 });
 
 
-// Middleware para manejar errores de autenticación
-app.get('/health', async (_req, res) => {
-  const state = mongoose.connection.readyState;
-  res.json({ mongo: state === 1 ? 'up' : 'down' });
-});
+// Middleware para manejar errores de autenticación tengo que seguir mirando
+// app.get('/health', async (_req, res) => {
+//   const state = mongoose.connection.readyState;
+//   res.json({ mongo: state === 1 ? 'up' : 'down' });
+// });
 
 
 // Html UI para la API
