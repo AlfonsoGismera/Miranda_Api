@@ -4,9 +4,9 @@ import { faker } from '@faker-js/faker';
 import bcrypt from 'bcrypt';
 import { connectDb } from '../src/db';
 import { EmployeeModel } from '../src/models/Employee';
-import { GuestModel }    from '../src/models/Guest';
-import { RoomModel }     from '../src/models/Room';
-import { UserModel }     from '../src/models/User';
+import { GuestModel } from '../src/models/Guest';
+import { RoomModel } from '../src/models/Room';
+import { UserModel } from '../src/models/User';
 
 async function seed() {
   await connectDb();
@@ -75,10 +75,10 @@ async function seed() {
 
   // Log final
   console.log('🌱 Seed completed:');
-  console.log(`  Employees: ${await EmployeeModel.countDocuments()}`);
-  console.log(`  Guests:    ${await GuestModel.countDocuments()}`);
-  console.log(`  Rooms:     ${await RoomModel.countDocuments()}`);
-  console.log(`  Users:     ${await UserModel.countDocuments()}`);
+  console.log(`Employees: ${await EmployeeModel.countDocuments()}`);
+  console.log(`Guests: ${await GuestModel.countDocuments()}`);
+  console.log(`Rooms: ${await RoomModel.countDocuments()}`);
+  console.log(`Users: ${await UserModel.countDocuments()}`);
 
   process.exit(0);
 }
