@@ -13,6 +13,7 @@ export const guestService = {
     const created = await GuestModel.create(g);
     return created.toObject();
   },
+  
 
   async update(g: IGuest): Promise<IGuest | null> {
     return GuestModel
