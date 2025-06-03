@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon --watch src --exec ts-node src/server.ts",
     "seed": "ts-node scripts/seed.ts",
-    "test": "jest"
+    "test": "jest",
+    "import": "ts-node ./scripts/importData.ts"
   },
   "keywords": [],
   "author": "",
