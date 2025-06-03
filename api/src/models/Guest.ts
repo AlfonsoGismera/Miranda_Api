@@ -13,7 +13,7 @@ const GuestSchema = new Schema<IGuest>({
   roomType:       { type: String, required: true },
   status:         { 
     type: String, 
-    enum: ['Checked In','Pending','Booked','Cancelled','Refunded'], 
+    enum: ['Checked In','Checked Out','Pending','Booked','Cancelled','Refunded'], 
     default: 'Pending' 
   },
   email:          { type: String, required: true },
